@@ -1,4 +1,4 @@
-package com.example.tffg;
+package com.sunrise.tffg;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

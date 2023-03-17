@@ -8,11 +8,11 @@
 		<version>3.0.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
+	<groupId>com.sunrise</groupId>
 	<artifactId>tffg</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>tffg</name>
-	<description>Landing page of “Trust Fund of Future Generations in the Republic of Sakha (Yakutia)”</description>
+	<description>About Landing page of Trust Fund of Future Generations in the Republic of Sakha (Yakutia) for &quot;Future of Yakutia&quot; hackathon</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
