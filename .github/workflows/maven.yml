@@ -27,6 +27,7 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+    - run: mvn --batch-mode --update-snapshots verify
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
@@ -36,9 +37,7 @@ jobs:
       run: npm ci
     - working-directory: ./svelte
       run: npm run java
-  test:
-    runs-on: ubuntu-latest
-    steps:
+
     - name: Run tests
       run: mvn test
       
