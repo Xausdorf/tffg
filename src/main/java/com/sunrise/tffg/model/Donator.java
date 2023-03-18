@@ -34,12 +34,11 @@ public class Donator {
         this.joinDate = joinDate;
     }
 
-    public Donator(String email, String phone, String name, Long sum, LocalDate joinDate) {
+    public Donator(String email, String phone, String name, Long sum) {
         this.email = email;
         this.phone = phone;
         this.name = name;
         this.sum = sum;
-        this.joinDate = joinDate;
     }
 
     public UUID getId() {

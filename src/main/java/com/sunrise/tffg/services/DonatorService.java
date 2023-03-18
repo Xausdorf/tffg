@@ -1,5 +1,6 @@
 package com.sunrise.tffg.services;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,6 +32,8 @@ public class DonatorService {
         if (donatorOptional.isPresent()) {
             throw new IllegalStateException("email or phone taken");
         }
+
+        donator.setJoinDate(LocalDate.now());
 
         donatorRepository.save(donator);
     }
