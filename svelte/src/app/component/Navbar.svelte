@@ -12,6 +12,9 @@
         <li class="nav-item">
           <a class="nav-link" href="#/submit">Submit</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#/news">News</a>
+        </li>
       </ul>
     </div>
   </div>

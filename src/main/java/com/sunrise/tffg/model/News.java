@@ -2,7 +2,6 @@ package com.sunrise.tffg.model;
 
 import jakarta.persistence.*;
 
-import java.util.Objects;
 import java.util.UUID;
 import java.time.LocalDate;
 
@@ -11,7 +10,7 @@ import java.time.LocalDate;
 public class News {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private UUID id;
     private String title;
     private String text;

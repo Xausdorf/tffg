@@ -16,7 +16,7 @@ import com.sunrise.tffg.repositories.NewsRepository;
 public class NewsConfig {
 
     @Bean
-    CommandLineRunner commandLineRunner(NewsRepository newsRepository) {
+    CommandLineRunner newsCommandLineRunner(NewsRepository newsRepository) {
         return args -> {
             News test1 = new News(
                     UUID.randomUUID(),

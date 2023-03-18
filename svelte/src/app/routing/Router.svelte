@@ -1,8 +1,9 @@
 <script>
   import { hash } from '../services/route.serv'
   import Homepage from '../pages/Homepage.svelte';
-  import Notfound from '../pages/Notfound.svelte';
   import Submit from '../pages/Submit.svelte';
+  import News from '../pages/News.svelte';
+  import Notfound from '../pages/Notfound.svelte';
 
   let value = Notfound;
 
@@ -13,6 +14,9 @@
         break;
       case 'submit':
         value = Submit;
+        break;
+      case 'news':
+        value = News;
         break;
       default:
         value = Notfound;
