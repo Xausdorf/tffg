@@ -38,25 +38,6 @@ var app = (function () {
 		return a != a ? b == b : a !== b || ((a && typeof a === 'object') || typeof a === 'function');
 	}
 
-	function create_slot(definition, ctx, fn) {
-		if (definition) {
-			const slot_ctx = get_slot_context(definition, ctx, fn);
-			return definition[0](slot_ctx);
-		}
-	}
-
-	function get_slot_context(definition, ctx, fn) {
-		return definition[1]
-			? assign({}, assign(ctx.$$scope.ctx, definition[1](fn ? fn(ctx) : {})))
-			: ctx.$$scope.ctx;
-	}
-
-	function get_slot_changes(definition, ctx, changed, fn) {
-		return definition[1]
-			? assign({}, assign(ctx.$$scope.changed || {}, definition[1](fn ? fn(changed) : {})))
-			: ctx.$$scope.changed || {};
-	}
-
 	function append(target, node) {
 		target.appendChild(node);
 	}
@@ -467,36 +448,40 @@ var app = (function () {
 		return child_ctx;
 	}
 
-	// (26:0) {:catch error}
+	// (52:0) {:catch error}
 	function create_catch_block(ctx) {
-		var p, t_value = ctx.error.message, t;
+		var small, t_value = ctx.error.message, t;
 
 		return {
 			c: function create() {
-				p = element("p");
+				small = element("small");
 				t = text(t_value);
-				set_style(p, "color", "red");
-				add_location(p, file, 26, 1, 472);
+				small.className = "form-text text-danger";
+				add_location(small, file, 52, 4, 1282);
 			},
 
 			m: function mount(target, anchor) {
-				insert(target, p, anchor);
-				append(p, t);
+				insert(target, small, anchor);
+				append(small, t);
 			},
 
-			p: noop,
+			p: function update(changed, ctx) {
+				if ((changed.promise) && t_value !== (t_value = ctx.error.message)) {
+					set_data(t, t_value);
+				}
+			},
 
 			d: function destroy(detaching) {
 				if (detaching) {
-					detach(p);
+					detach(small);
 				}
 			}
 		};
 	}
 
-	// (18:0) {:then response}
+	// (31:0) {:then response}
 	function create_then_block(ctx) {
-		var each_1_anchor;
+		var div;
 
 		var each_value = ctx.response;
 
@@ -508,19 +493,21 @@ var app = (function () {
 
 		return {
 			c: function create() {
+				div = element("div");
+
 				for (var i = 0; i < each_blocks.length; i += 1) {
 					each_blocks[i].c();
 				}
-
-				each_1_anchor = empty();
+				div.className = "row row-cols-1 row-cols-md-3 g-4";
+				add_location(div, file, 31, 1, 535);
 			},
 
 			m: function mount(target, anchor) {
-				for (var i = 0; i < each_blocks.length; i += 1) {
-					each_blocks[i].m(target, anchor);
-				}
+				insert(target, div, anchor);
 
-				insert(target, each_1_anchor, anchor);
+				for (var i = 0; i < each_blocks.length; i += 1) {
+					each_blocks[i].m(div, null);
+				}
 			},
 
 			p: function update(changed, ctx) {
@@ -535,7 +522,7 @@ var app = (function () {
 						} else {
 							each_blocks[i] = create_each_block(child_ctx);
 							each_blocks[i].c();
-							each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
+							each_blocks[i].m(div, null);
 						}
 					}
 
@@ -547,97 +534,163 @@ var app = (function () {
 			},
 
 			d: function destroy(detaching) {
-				destroy_each(each_blocks, detaching);
-
 				if (detaching) {
-					detach(each_1_anchor);
+					detach(div);
 				}
+
+				destroy_each(each_blocks, detaching);
 			}
 		};
 	}
 
-	// (19:1) {#each response as element}
+	// (33:2) {#each response as element}
 	function create_each_block(ctx) {
-		var p0, t0_value = ctx.element.id, t0, t1, p1, t2_value = ctx.element.email, t2, t3, p2, t4_value = ctx.element.phone, t4, t5, p3, t6_value = ctx.element.name, t6, t7, p4, t8_value = ctx.element.joinDate, t8;
+		var div4, div3, div1, div0, h5, t0_value = ctx.element.name, t0, t1, button, t2, p0, t3_value = ctx.element.email, t3, t4, p1, t5_value = ctx.element.phone, t5, t6, div2, p2, small0, t7, t8_value = ctx.element.joinDate, t8, t9, p3, small1, t10_value = ctx.element.id, t10, t11, dispose;
+
+		function click_handler() {
+			return ctx.click_handler(ctx);
+		}
 
 		return {
 			c: function create() {
-				p0 = element("p");
+				div4 = element("div");
+				div3 = element("div");
+				div1 = element("div");
+				div0 = element("div");
+				h5 = element("h5");
 				t0 = text(t0_value);
 				t1 = space();
+				button = element("button");
+				t2 = space();
+				p0 = element("p");
+				t3 = text(t3_value);
+				t4 = space();
 				p1 = element("p");
-				t2 = text(t2_value);
-				t3 = space();
+				t5 = text(t5_value);
+				t6 = space();
+				div2 = element("div");
 				p2 = element("p");
-				t4 = text(t4_value);
-				t5 = space();
-				p3 = element("p");
-				t6 = text(t6_value);
-				t7 = space();
-				p4 = element("p");
+				small0 = element("small");
+				t7 = text("joined at ");
 				t8 = text(t8_value);
-				add_location(p0, file, 19, 3, 321);
-				add_location(p1, file, 20, 3, 344);
-				add_location(p2, file, 21, 3, 370);
-				add_location(p3, file, 22, 3, 396);
-				add_location(p4, file, 23, 3, 421);
+				t9 = space();
+				p3 = element("p");
+				small1 = element("small");
+				t10 = text(t10_value);
+				t11 = space();
+				h5.className = "card-title";
+				add_location(h5, file, 37, 6, 714);
+				button.type = "button";
+				button.className = "btn-close ms-auto";
+				attr(button, "aria-label", "Close");
+				add_location(button, file, 38, 6, 763);
+				div0.className = "d-flex";
+				add_location(div0, file, 36, 5, 687);
+				p0.className = "card-text";
+				add_location(p0, file, 40, 5, 915);
+				p1.className = "card-text";
+				add_location(p1, file, 41, 5, 961);
+				div1.className = "card-body";
+				add_location(div1, file, 35, 4, 658);
+				small0.className = "text-muted";
+				add_location(small0, file, 44, 26, 1069);
+				p2.className = "card-text";
+				add_location(p2, file, 44, 5, 1048);
+				small1.className = "text-muted";
+				add_location(small1, file, 45, 26, 1162);
+				p3.className = "card-text";
+				add_location(p3, file, 45, 5, 1141);
+				div2.className = "card-footer";
+				add_location(div2, file, 43, 4, 1017);
+				div3.className = "card";
+				add_location(div3, file, 34, 3, 635);
+				div4.className = "col";
+				add_location(div4, file, 33, 2, 614);
+				dispose = listen(button, "click", click_handler);
 			},
 
 			m: function mount(target, anchor) {
-				insert(target, p0, anchor);
-				append(p0, t0);
-				insert(target, t1, anchor);
-				insert(target, p1, anchor);
-				append(p1, t2);
-				insert(target, t3, anchor);
-				insert(target, p2, anchor);
-				append(p2, t4);
-				insert(target, t5, anchor);
-				insert(target, p3, anchor);
-				append(p3, t6);
-				insert(target, t7, anchor);
-				insert(target, p4, anchor);
-				append(p4, t8);
+				insert(target, div4, anchor);
+				append(div4, div3);
+				append(div3, div1);
+				append(div1, div0);
+				append(div0, h5);
+				append(h5, t0);
+				append(div0, t1);
+				append(div0, button);
+				append(div1, t2);
+				append(div1, p0);
+				append(p0, t3);
+				append(div1, t4);
+				append(div1, p1);
+				append(p1, t5);
+				append(div3, t6);
+				append(div3, div2);
+				append(div2, p2);
+				append(p2, small0);
+				append(small0, t7);
+				append(small0, t8);
+				append(div2, t9);
+				append(div2, p3);
+				append(p3, small1);
+				append(small1, t10);
+				append(div4, t11);
 			},
 
-			p: noop,
+			p: function update(changed, new_ctx) {
+				ctx = new_ctx;
+				if ((changed.promise) && t0_value !== (t0_value = ctx.element.name)) {
+					set_data(t0, t0_value);
+				}
+
+				if ((changed.promise) && t3_value !== (t3_value = ctx.element.email)) {
+					set_data(t3, t3_value);
+				}
+
+				if ((changed.promise) && t5_value !== (t5_value = ctx.element.phone)) {
+					set_data(t5, t5_value);
+				}
+
+				if ((changed.promise) && t8_value !== (t8_value = ctx.element.joinDate)) {
+					set_data(t8, t8_value);
+				}
+
+				if ((changed.promise) && t10_value !== (t10_value = ctx.element.id)) {
+					set_data(t10, t10_value);
+				}
+			},
 
 			d: function destroy(detaching) {
 				if (detaching) {
-					detach(p0);
-					detach(t1);
-					detach(p1);
-					detach(t3);
-					detach(p2);
-					detach(t5);
-					detach(p3);
-					detach(t7);
-					detach(p4);
+					detach(div4);
 				}
+
+				dispose();
 			}
 		};
 	}
 
-	// (16:16)   <p>...waiting</p> {:then response}
+	// (29:16)      <div class="spinner-border mt-3" role="status"></div> {:then response}
 	function create_pending_block(ctx) {
-		var p;
+		var div;
 
 		return {
 			c: function create() {
-				p = element("p");
-				p.textContent = "...waiting";
-				add_location(p, file, 16, 1, 254);
+				div = element("div");
+				div.className = "spinner-border mt-3";
+				attr(div, "role", "status");
+				add_location(div, file, 29, 4, 463);
 			},
 
 			m: function mount(target, anchor) {
-				insert(target, p, anchor);
+				insert(target, div, anchor);
 			},
 
 			p: noop,
 
 			d: function destroy(detaching) {
 				if (detaching) {
-					detach(p);
+					detach(div);
 				}
 			}
 		};
@@ -681,7 +734,7 @@ var app = (function () {
 				ctx = new_ctx;
 				info.ctx = ctx;
 
-				if (promise_1 !== (promise_1 = ctx.promise) && handle_promise(promise_1, info)) ; else {
+				if (('promise' in changed) && promise_1 !== (promise_1 = ctx.promise) && handle_promise(promise_1, info)) ; else {
 					info.block.p(changed, assign(assign({}, ctx), info.resolved));
 				}
 			},
@@ -702,19 +755,36 @@ var app = (function () {
 
 	async function getList() {
 	    const res = await fetch(`api/v1/donator`);
-		const text = await res.json();
+	const text = await res.json();
 
-		if (res.ok) {
-			return text;
-		} else {
-			throw new Error(text);
-		} 
+	if (res.ok) {
+	  return text;
+	} else {
+	  throw text;
+	}
 	  }
 
-	function instance($$self) {
+	async function deleteDonator(id) {
+	const res = await fetch(`api/v1/donator/${id}`, {
+		method: 'DELETE'
+	});
+
+	if (!res.ok) 
+		throw await res.json();
+	  }
+
+	function instance($$self, $$props, $$invalidate) {
 		let promise = getList();
 
-		return { promise };
+	  async function loadList() {
+		$$invalidate('promise', promise = await getList());
+	  }
+
+		function click_handler({ element }) {
+			return deleteDonator(element.id).then(loadList);
+		}
+
+		return { promise, loadList, click_handler };
 	}
 
 	class GetList extends SvelteComponentDev {
@@ -795,7 +865,9 @@ var app = (function () {
 		return {
 			c: function create() {
 				h1 = element("h1");
-				h1.textContent = "Wrong way, go back.";
+				h1.textContent = "Page not found";
+				h1.className = "text-center";
+				set_style(h1, "margin-top", "43vh");
 				add_location(h1, file$2, 0, 0, 0);
 			},
 
@@ -830,7 +902,7 @@ var app = (function () {
 
 	const file$3 = "src/app/pages/Submit.svelte";
 
-	// (38:0) {#if show}
+	// (54:4) {#if show}
 	function create_if_block(ctx) {
 		var await_block_anchor, promise_1;
 
@@ -881,21 +953,21 @@ var app = (function () {
 		};
 	}
 
-	// (43:4) {:catch error}
+	// (59:8) {:catch error}
 	function create_catch_block$1(ctx) {
-		var p, t_value = ctx.error.message, t;
+		var small, t_value = ctx.error.message, t;
 
 		return {
 			c: function create() {
-				p = element("p");
+				small = element("small");
 				t = text(t_value);
-				set_style(p, "color", "red");
-				add_location(p, file$3, 43, 8, 1014);
+				small.className = "form-text text-danger";
+				add_location(small, file$3, 59, 12, 1709);
 			},
 
 			m: function mount(target, anchor) {
-				insert(target, p, anchor);
-				append(p, t);
+				insert(target, small, anchor);
+				append(small, t);
 			},
 
 			p: function update(changed, ctx) {
@@ -906,110 +978,138 @@ var app = (function () {
 
 			d: function destroy(detaching) {
 				if (detaching) {
-					detach(p);
+					detach(small);
 				}
 			}
 		};
 	}
 
-	// (41:4) {:then}
+	// (57:8) {:then}
 	function create_then_block$1(ctx) {
-		var p;
+		var small;
 
 		return {
 			c: function create() {
-				p = element("p");
-				p.textContent = "sent successfully";
-				add_location(p, file$3, 41, 8, 962);
+				small = element("small");
+				small.textContent = "Успешно отправлено";
+				small.className = "form-text text-success";
+				add_location(small, file$3, 57, 12, 1609);
 			},
 
 			m: function mount(target, anchor) {
-				insert(target, p, anchor);
+				insert(target, small, anchor);
 			},
 
 			p: noop,
 
 			d: function destroy(detaching) {
 				if (detaching) {
-					detach(p);
+					detach(small);
 				}
 			}
 		};
 	}
 
-	// (39:20)          <p>...waiting</p>     {:then}
+	// (55:24)              <div class="spinner-border mt-3" role="status"></div>         {:then}
 	function create_pending_block$1(ctx) {
-		var p;
+		var div;
 
 		return {
 			c: function create() {
-				p = element("p");
-				p.textContent = "...waiting";
-				add_location(p, file$3, 39, 8, 924);
+				div = element("div");
+				div.className = "spinner-border mt-3";
+				attr(div, "role", "status");
+				add_location(div, file$3, 55, 12, 1527);
 			},
 
 			m: function mount(target, anchor) {
-				insert(target, p, anchor);
+				insert(target, div, anchor);
 			},
 
 			p: noop,
 
 			d: function destroy(detaching) {
 				if (detaching) {
-					detach(p);
+					detach(div);
 				}
 			}
 		};
 	}
 
 	function create_fragment$3(ctx) {
-		var form_1, label0, t1, input0, t2, label1, t4, input1, t5, label2, t7, input2, t8, label3, t10, input3, t11, button, t13, if_block_anchor, dispose;
+		var div5, h5, t1, div4, form_1, div0, label0, t3, input0, t4, div1, label1, t6, input1, t7, div2, label2, t9, input2, t10, div3, label3, t12, input3, t13, button, t15, dispose;
 
 		var if_block = (ctx.show) && create_if_block(ctx);
 
 		return {
 			c: function create() {
-				form_1 = element("form");
-				label0 = element("label");
-				label0.textContent = "Name";
+				div5 = element("div");
+				h5 = element("h5");
+				h5.textContent = "Отправить деняк";
 				t1 = space();
+				div4 = element("div");
+				form_1 = element("form");
+				div0 = element("div");
+				label0 = element("label");
+				label0.textContent = "ФИО";
+				t3 = space();
 				input0 = element("input");
-				t2 = space();
-				label1 = element("label");
-				label1.textContent = "E-mail";
 				t4 = space();
+				div1 = element("div");
+				label1 = element("label");
+				label1.textContent = "Электронная почта";
+				t6 = space();
 				input1 = element("input");
-				t5 = space();
-				label2 = element("label");
-				label2.textContent = "Phone";
 				t7 = space();
+				div2 = element("div");
+				label2 = element("label");
+				label2.textContent = "Номер телефона";
+				t9 = space();
 				input2 = element("input");
-				t8 = space();
-				label3 = element("label");
-				label3.textContent = "Sum";
 				t10 = space();
+				div3 = element("div");
+				label3 = element("label");
+				label3.textContent = "Сумма пожертвования";
+				t12 = space();
 				input3 = element("input");
-				t11 = space();
-				button = element("button");
-				button.textContent = "submit";
 				t13 = space();
+				button = element("button");
+				button.textContent = "Отправить";
+				t15 = space();
 				if (if_block) if_block.c();
-				if_block_anchor = empty();
-				add_location(label0, file$3, 26, 2, 552);
+				h5.className = "card-header";
+				add_location(h5, file$3, 31, 2, 624);
+				add_location(label0, file$3, 35, 12, 753);
 				attr(input0, "type", "text");
-				add_location(input0, file$3, 27, 2, 574);
-				add_location(label1, file$3, 28, 2, 621);
+				input0.className = "form-control";
+				add_location(input0, file$3, 36, 12, 784);
+				div0.className = "form-group";
+				add_location(div0, file$3, 34, 8, 716);
+				add_location(label1, file$3, 39, 12, 910);
 				attr(input1, "type", "email");
-				add_location(input1, file$3, 29, 2, 645);
-				add_location(label2, file$3, 30, 2, 694);
+				input1.className = "form-control";
+				add_location(input1, file$3, 40, 12, 955);
+				div1.className = "form-group";
+				add_location(div1, file$3, 38, 8, 873);
+				add_location(label2, file$3, 43, 12, 1083);
 				attr(input2, "type", "tel");
-				add_location(input2, file$3, 31, 2, 717);
-				add_location(label3, file$3, 32, 2, 764);
+				input2.className = "form-control";
+				add_location(input2, file$3, 44, 12, 1125);
+				div2.className = "form-group";
+				add_location(div2, file$3, 42, 8, 1046);
+				add_location(label3, file$3, 47, 12, 1251);
 				attr(input3, "type", "number");
-				add_location(input3, file$3, 33, 2, 785);
-				add_location(button, file$3, 34, 2, 833);
-				form_1.className = "content";
-				add_location(form_1, file$3, 25, 0, 527);
+				input3.className = "form-control";
+				add_location(input3, file$3, 48, 12, 1298);
+				div3.className = "form-group";
+				add_location(div3, file$3, 46, 8, 1214);
+				button.className = "btn btn-primary mt-3";
+				add_location(button, file$3, 51, 8, 1389);
+				add_location(form_1, file$3, 33, 4, 699);
+				div4.className = "card-body";
+				add_location(div4, file$3, 32, 2, 671);
+				div5.className = "card";
+				add_location(div5, file$3, 30, 0, 603);
 
 				dispose = [
 					listen(input0, "input", ctx.input0_input_handler),
@@ -1025,39 +1125,46 @@ var app = (function () {
 			},
 
 			m: function mount(target, anchor) {
-				insert(target, form_1, anchor);
-				append(form_1, label0);
-				append(form_1, t1);
-				append(form_1, input0);
+				insert(target, div5, anchor);
+				append(div5, h5);
+				append(div5, t1);
+				append(div5, div4);
+				append(div4, form_1);
+				append(form_1, div0);
+				append(div0, label0);
+				append(div0, t3);
+				append(div0, input0);
 
 				input0.value = ctx.form.name;
 
-				append(form_1, t2);
-				append(form_1, label1);
 				append(form_1, t4);
-				append(form_1, input1);
+				append(form_1, div1);
+				append(div1, label1);
+				append(div1, t6);
+				append(div1, input1);
 
 				input1.value = ctx.form.email;
 
-				append(form_1, t5);
-				append(form_1, label2);
 				append(form_1, t7);
-				append(form_1, input2);
+				append(form_1, div2);
+				append(div2, label2);
+				append(div2, t9);
+				append(div2, input2);
 
 				input2.value = ctx.form.phone;
 
-				append(form_1, t8);
-				append(form_1, label3);
 				append(form_1, t10);
-				append(form_1, input3);
+				append(form_1, div3);
+				append(div3, label3);
+				append(div3, t12);
+				append(div3, input3);
 
 				input3.value = ctx.form.sum;
 
-				append(form_1, t11);
+				append(form_1, t13);
 				append(form_1, button);
-				insert(target, t13, anchor);
-				if (if_block) if_block.m(target, anchor);
-				insert(target, if_block_anchor, anchor);
+				append(div4, t15);
+				if (if_block) if_block.m(div4, null);
 			},
 
 			p: function update(changed, ctx) {
@@ -1072,7 +1179,7 @@ var app = (function () {
 					} else {
 						if_block = create_if_block(ctx);
 						if_block.c();
-						if_block.m(if_block_anchor.parentNode, if_block_anchor);
+						if_block.m(div4, null);
 					}
 				} else if (if_block) {
 					if_block.d(1);
@@ -1085,23 +1192,22 @@ var app = (function () {
 
 			d: function destroy(detaching) {
 				if (detaching) {
-					detach(form_1);
-					detach(t13);
+					detach(div5);
 				}
 
-				if (if_block) if_block.d(detaching);
-
-				if (detaching) {
-					detach(if_block_anchor);
-				}
-
+				if (if_block) if_block.d();
 				run_all(dispose);
 			}
 		};
 	}
 
 	function instance$1($$self, $$props, $$invalidate) {
-		let form = {};
+		let form = {
+	        name: '',
+	        email: '',
+	        phone: '',
+	        sum: 0
+	    };
 
 	    async function submitForm() {
 	        const res = await fetch(`api/v1/donator`, {
@@ -1276,230 +1382,65 @@ var app = (function () {
 		}
 	}
 
-	/* src/app/component/RouterLink.svelte generated by Svelte v3.1.0 */
+	/* src/app/component/Navbar.svelte generated by Svelte v3.1.0 */
 
-	const file$5 = "src/app/component/RouterLink.svelte";
+	const file$5 = "src/app/component/Navbar.svelte";
 
 	function create_fragment$5(ctx) {
-		var a, a_href_value, current;
-
-		const default_slot_1 = ctx.$$slots.default;
-		const default_slot = create_slot(default_slot_1, ctx, null);
-
-		return {
-			c: function create() {
-				a = element("a");
-
-				if (default_slot) default_slot.c();
-
-				a.href = a_href_value = "#/" + ctx.url;
-				a.className = "svelte-1b10eml";
-				add_location(a, file$5, 10, 0, 102);
-			},
-
-			l: function claim(nodes) {
-				if (default_slot) default_slot.l(a_nodes);
-				throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
-			},
-
-			m: function mount(target, anchor) {
-				insert(target, a, anchor);
-
-				if (default_slot) {
-					default_slot.m(a, null);
-				}
-
-				current = true;
-			},
-
-			p: function update(changed, ctx) {
-				if (default_slot && default_slot.p && changed.$$scope) {
-					default_slot.p(get_slot_changes(default_slot_1, ctx, changed,), get_slot_context(default_slot_1, ctx, null));
-				}
-
-				if ((!current || changed.url) && a_href_value !== (a_href_value = "#/" + ctx.url)) {
-					a.href = a_href_value;
-				}
-			},
-
-			i: function intro(local) {
-				if (current) return;
-				if (default_slot && default_slot.i) default_slot.i(local);
-				current = true;
-			},
-
-			o: function outro(local) {
-				if (default_slot && default_slot.o) default_slot.o(local);
-				current = false;
-			},
-
-			d: function destroy(detaching) {
-				if (detaching) {
-					detach(a);
-				}
-
-				if (default_slot) default_slot.d(detaching);
-			}
-		};
-	}
-
-	function instance$3($$self, $$props, $$invalidate) {
-		let { url } = $$props;
-
-		let { $$slots = {}, $$scope } = $$props;
-
-		$$self.$set = $$props => {
-			if ('url' in $$props) $$invalidate('url', url = $$props.url);
-			if ('$$scope' in $$props) $$invalidate('$$scope', $$scope = $$props.$$scope);
-		};
-
-		return { url, $$slots, $$scope };
-	}
-
-	class RouterLink extends SvelteComponentDev {
-		constructor(options) {
-			super(options);
-			init(this, options, instance$3, create_fragment$5, safe_not_equal, ["url"]);
-
-			const { ctx } = this.$$;
-			const props = options.props || {};
-			if (ctx.url === undefined && !('url' in props)) {
-				console.warn("<RouterLink> was created without expected prop 'url'");
-			}
-		}
-
-		get url() {
-			throw new Error("<RouterLink>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
-		}
-
-		set url(value) {
-			throw new Error("<RouterLink>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
-		}
-	}
-
-	/* src/app/component/Sidenav.svelte generated by Svelte v3.1.0 */
-
-	const file$6 = "src/app/component/Sidenav.svelte";
-
-	// (26:6) <RouterLink url=''>
-	function create_default_slot_2(ctx) {
-		var t;
-
-		return {
-			c: function create() {
-				t = text("Homepage");
-			},
-
-			m: function mount(target, anchor) {
-				insert(target, t, anchor);
-			},
-
-			d: function destroy(detaching) {
-				if (detaching) {
-					detach(t);
-				}
-			}
-		};
-	}
-
-	// (29:6) <RouterLink url='submit'>
-	function create_default_slot_1(ctx) {
-		var t;
-
-		return {
-			c: function create() {
-				t = text("Submit");
-			},
-
-			m: function mount(target, anchor) {
-				insert(target, t, anchor);
-			},
-
-			d: function destroy(detaching) {
-				if (detaching) {
-					detach(t);
-				}
-			}
-		};
-	}
-
-	// (32:6) <RouterLink url='asas'>
-	function create_default_slot(ctx) {
-		var t;
-
-		return {
-			c: function create() {
-				t = text("WrongPage");
-			},
-
-			m: function mount(target, anchor) {
-				insert(target, t, anchor);
-			},
-
-			d: function destroy(detaching) {
-				if (detaching) {
-					detach(t);
-				}
-			}
-		};
-	}
-
-	function create_fragment$6(ctx) {
-		var nav, h1, t1, ul, li0, t2, li1, t3, li2, current;
-
-		var routerlink0 = new RouterLink({
-			props: {
-			url: "",
-			$$slots: { default: [create_default_slot_2] },
-			$$scope: { ctx }
-		},
-			$$inline: true
-		});
-
-		var routerlink1 = new RouterLink({
-			props: {
-			url: "submit",
-			$$slots: { default: [create_default_slot_1] },
-			$$scope: { ctx }
-		},
-			$$inline: true
-		});
-
-		var routerlink2 = new RouterLink({
-			props: {
-			url: "asas",
-			$$slots: { default: [create_default_slot] },
-			$$scope: { ctx }
-		},
-			$$inline: true
-		});
+		var nav, div1, a0, t1, button, span, t2, div0, ul, li0, a1, t4, li1, a2;
 
 		return {
 			c: function create() {
 				nav = element("nav");
-				h1 = element("h1");
-				h1.textContent = "Sidenav";
+				div1 = element("div");
+				a0 = element("a");
+				a0.textContent = "tffg";
 				t1 = space();
+				button = element("button");
+				span = element("span");
+				t2 = space();
+				div0 = element("div");
 				ul = element("ul");
 				li0 = element("li");
-				routerlink0.$$.fragment.c();
-				t2 = space();
+				a1 = element("a");
+				a1.textContent = "Home";
+				t4 = space();
 				li1 = element("li");
-				routerlink1.$$.fragment.c();
-				t3 = space();
-				li2 = element("li");
-				routerlink2.$$.fragment.c();
-				add_location(h1, file$6, 22, 2, 305);
-				li0.className = "svelte-z3uaim";
-				add_location(li0, file$6, 24, 4, 333);
-				li1.className = "svelte-z3uaim";
-				add_location(li1, file$6, 27, 4, 399);
-				li2.className = "svelte-z3uaim";
-				add_location(li2, file$6, 30, 4, 469);
-				ul.className = "svelte-z3uaim";
-				add_location(ul, file$6, 23, 2, 324);
-				nav.className = "svelte-z3uaim";
-				add_location(nav, file$6, 21, 0, 297);
+				a2 = element("a");
+				a2.textContent = "Submit";
+				a0.className = "navbar-brand";
+				a0.href = "#/";
+				add_location(a0, file$5, 2, 4, 96);
+				span.className = "navbar-toggler-icon";
+				add_location(span, file$5, 4, 6, 328);
+				button.className = "navbar-toggler";
+				button.type = "button";
+				button.dataset.bsToggle = "collapse";
+				button.dataset.bsTarget = "#navbarNav";
+				attr(button, "aria-controls", "navbarNav");
+				attr(button, "aria-expanded", "false");
+				attr(button, "aria-label", "Toggle navigation");
+				add_location(button, file$5, 3, 4, 143);
+				a1.className = "nav-link active";
+				attr(a1, "aria-current", "page");
+				a1.href = "#/";
+				add_location(a1, file$5, 9, 10, 512);
+				li0.className = "nav-item";
+				add_location(li0, file$5, 8, 8, 480);
+				a2.className = "nav-link";
+				a2.href = "#/submit";
+				add_location(a2, file$5, 12, 10, 632);
+				li1.className = "nav-item";
+				add_location(li1, file$5, 11, 8, 600);
+				ul.className = "navbar-nav";
+				add_location(ul, file$5, 7, 6, 448);
+				div0.className = "collapse navbar-collapse";
+				div0.id = "navbarNav";
+				add_location(div0, file$5, 6, 4, 388);
+				div1.className = "container-fluid";
+				add_location(div1, file$5, 1, 2, 62);
+				nav.className = "navbar navbar-expand-lg navbar-light bg-light";
+				add_location(nav, file$5, 0, 0, 0);
 			},
 
 			l: function claim(nodes) {
@@ -1508,95 +1449,59 @@ var app = (function () {
 
 			m: function mount(target, anchor) {
 				insert(target, nav, anchor);
-				append(nav, h1);
-				append(nav, t1);
-				append(nav, ul);
+				append(nav, div1);
+				append(div1, a0);
+				append(div1, t1);
+				append(div1, button);
+				append(button, span);
+				append(div1, t2);
+				append(div1, div0);
+				append(div0, ul);
 				append(ul, li0);
-				mount_component(routerlink0, li0, null);
-				append(ul, t2);
+				append(li0, a1);
+				append(ul, t4);
 				append(ul, li1);
-				mount_component(routerlink1, li1, null);
-				append(ul, t3);
-				append(ul, li2);
-				mount_component(routerlink2, li2, null);
-				current = true;
+				append(li1, a2);
 			},
 
-			p: function update(changed, ctx) {
-				var routerlink0_changes = {};
-				if (changed.$$scope) routerlink0_changes.$$scope = { changed, ctx };
-				routerlink0.$set(routerlink0_changes);
-
-				var routerlink1_changes = {};
-				if (changed.$$scope) routerlink1_changes.$$scope = { changed, ctx };
-				routerlink1.$set(routerlink1_changes);
-
-				var routerlink2_changes = {};
-				if (changed.$$scope) routerlink2_changes.$$scope = { changed, ctx };
-				routerlink2.$set(routerlink2_changes);
-			},
-
-			i: function intro(local) {
-				if (current) return;
-				routerlink0.$$.fragment.i(local);
-
-				routerlink1.$$.fragment.i(local);
-
-				routerlink2.$$.fragment.i(local);
-
-				current = true;
-			},
-
-			o: function outro(local) {
-				routerlink0.$$.fragment.o(local);
-				routerlink1.$$.fragment.o(local);
-				routerlink2.$$.fragment.o(local);
-				current = false;
-			},
+			p: noop,
+			i: noop,
+			o: noop,
 
 			d: function destroy(detaching) {
 				if (detaching) {
 					detach(nav);
 				}
-
-				routerlink0.$destroy();
-
-				routerlink1.$destroy();
-
-				routerlink2.$destroy();
 			}
 		};
 	}
 
-	class Sidenav extends SvelteComponentDev {
+	class Navbar extends SvelteComponentDev {
 		constructor(options) {
 			super(options);
-			init(this, options, null, create_fragment$6, safe_not_equal, []);
+			init(this, options, null, create_fragment$5, safe_not_equal, []);
 		}
 	}
 
 	/* src/App.svelte generated by Svelte v3.1.0 */
 
-	const file$7 = "src/App.svelte";
+	const file$6 = "src/App.svelte";
 
-	function create_fragment$7(ctx) {
+	function create_fragment$6(ctx) {
 		var div, t, current;
 
-		var sidenav = new Sidenav({
-			props: { class: "sidenav" },
-			$$inline: true
-		});
+		var navbar = new Navbar({ $$inline: true });
 
 		var router = new Router({ $$inline: true });
 
 		return {
 			c: function create() {
 				div = element("div");
-				sidenav.$$.fragment.c();
+				navbar.$$.fragment.c();
 				t = space();
 				router.$$.fragment.c();
-				div.className = "app-shell svelte-h5712t";
-				add_location(div, file$7, 16, 0, 260);
+				div.className = "app-shell svelte-hrds2b";
+				add_location(div, file$6, 15, 0, 239);
 			},
 
 			l: function claim(nodes) {
@@ -1605,7 +1510,7 @@ var app = (function () {
 
 			m: function mount(target, anchor) {
 				insert(target, div, anchor);
-				mount_component(sidenav, div, null);
+				mount_component(navbar, div, null);
 				append(div, t);
 				mount_component(router, div, null);
 				current = true;
@@ -1615,7 +1520,7 @@ var app = (function () {
 
 			i: function intro(local) {
 				if (current) return;
-				sidenav.$$.fragment.i(local);
+				navbar.$$.fragment.i(local);
 
 				router.$$.fragment.i(local);
 
@@ -1623,7 +1528,7 @@ var app = (function () {
 			},
 
 			o: function outro(local) {
-				sidenav.$$.fragment.o(local);
+				navbar.$$.fragment.o(local);
 				router.$$.fragment.o(local);
 				current = false;
 			},
@@ -1633,7 +1538,7 @@ var app = (function () {
 					detach(div);
 				}
 
-				sidenav.$destroy();
+				navbar.$destroy();
 
 				router.$destroy();
 			}
@@ -1643,7 +1548,7 @@ var app = (function () {
 	class App extends SvelteComponentDev {
 		constructor(options) {
 			super(options);
-			init(this, options, null, create_fragment$7, safe_not_equal, []);
+			init(this, options, null, create_fragment$6, safe_not_equal, []);
 		}
 	}
 

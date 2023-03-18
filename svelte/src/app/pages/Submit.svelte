@@ -1,5 +1,10 @@
 <script>
-    let form = {};
+    let form = {
+        name: '',
+        email: '',
+        phone: '',
+        sum: 0
+    };
 
     async function submitForm() {
         const res = await fetch(`api/v1/donator`, {
@@ -23,24 +28,38 @@
     }
 </script>
 
-<form class="content">
-  <label>Name</label>
-  <input type="text" bind:value={form.name} />
-  <label>E-mail</label>
-  <input type="email" bind:value={form.email} />
-  <label>Phone</label>
-  <input type="tel" bind:value={form.phone} />
-  <label>Sum</label>
-  <input type="number" bind:value={form.sum} />
-  <button on:click={submit}>submit</button>
-</form>
+<div class="card">
+  <h5 class="card-header">Отправить деняк</h5>
+  <div class="card-body">
+    <form>  
+        <div class="form-group">
+            <label>ФИО</label>
+            <input type="text" class="form-control" bind:value={form.name} />
+        </div>
+        <div class="form-group">
+            <label>Электронная почта</label>
+            <input type="email" class="form-control" bind:value={form.email} />
+        </div>
+        <div class="form-group">
+            <label>Номер телефона</label>
+            <input type="tel" class="form-control" bind:value={form.phone} />
+        </div>
+        <div class="form-group">
+            <label>Сумма пожертвования</label>
+            <input type="number" class="form-control" bind:value={form.sum} />
+        </div>
 
-{#if show}
-    {#await promise}
-        <p>...waiting</p>
-    {:then}
-        <p>sent successfully</p>
-    {:catch error}
-        <p style="color: red">{error.message}</p>
-    {/await}
-{/if}
+        <button on:click={submit} class="btn btn-primary mt-3">Отправить</button>
+    </form>
+    {#if show}
+        {#await promise}
+            <div class="spinner-border mt-3" role="status"></div>
+        {:then}
+            <small class="form-text text-success">Успешно отправлено</small>
+        {:catch error}
+            <small class="form-text text-danger">{error.message}</small>
+        {/await}
+    {/if}
+  </div>
+</div>
+

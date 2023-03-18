@@ -1,1 +1,1 @@
-<h1>Wrong way, go back.</h1>
+<h1 class="text-center" style="margin-top: 43vh">Page not found</h1>
