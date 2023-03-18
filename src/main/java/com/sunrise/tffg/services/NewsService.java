@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.sunrise.tffg.InternalException;
 import com.sunrise.tffg.model.News;
 import com.sunrise.tffg.repositories.NewsRepository;
 
@@ -28,7 +29,7 @@ public class NewsService {
     public void addNews(News news) {
         Optional<News> newsOptional = newsRepository.findNewsByTitle(news.getTitle());
         if (newsOptional.isPresent()) {
-            throw new IllegalStateException("title taken");
+            throw new InternalException("title taken");
         }
 
         newsRepository.save(news);
@@ -37,7 +38,7 @@ public class NewsService {
     public void deleteNews(UUID newsId) {
         boolean exists = newsRepository.existsById(newsId);
         if (!exists) {
-            throw new IllegalStateException("News with id " + newsId + " does not exist");
+            throw new InternalException("News with id " + newsId + " does not exist");
         }
 
         newsRepository.deleteById(newsId);
@@ -46,12 +47,12 @@ public class NewsService {
     @Transactional
     public void updateNews(UUID newsId, String title, String text, String imgSrc) {
         News news = newsRepository.findById(newsId)
-                .orElseThrow(() -> new IllegalStateException("News with id " + newsId + " does not exist"));
+                .orElseThrow(() -> new InternalException("News with id " + newsId + " does not exist"));
 
         if (title != null && title.length() > 0 && !Objects.equals(news.getTitle(), title)) {
             Optional<News> newsOptional = newsRepository.findNewsByTitle(title);
             if (newsOptional.isPresent()) {
-                throw new IllegalStateException("title taken");
+                throw new InternalException("title taken");
             }
             news.setTitle(title);
         }

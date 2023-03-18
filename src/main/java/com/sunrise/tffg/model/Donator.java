@@ -12,9 +12,9 @@ import jakarta.persistence.Table;
 @Entity
 @Table
 public class Donator {
-    
+
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String email;
     private String phone;

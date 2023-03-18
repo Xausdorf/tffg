@@ -19,25 +19,22 @@ public class DonatorConfig {
     CommandLineRunner commandLineRunner(DonatorRepository donatorRepository) {
         return args -> {
             Donator test1 = new Donator(
-                UUID.randomUUID(),
-                "test@mail.com",
-                "+99999999999",
-                "tester 1",
-                22000L,
-                LocalDate.of(2000, Month.AUGUST, 12)
-            );
+                    UUID.randomUUID(),
+                    "test@mail.com",
+                    "+99999999999",
+                    "tester 1",
+                    22000L,
+                    LocalDate.of(2000, Month.AUGUST, 12));
             Donator test2 = new Donator(
-                UUID.randomUUID(),
-                "test2@mail.com",
-                "+99999999992",
-                "tester 2",
-                2000L,
-                LocalDate.of(1998, Month.AUGUST, 14)
-            );
+                    UUID.randomUUID(),
+                    "test2@mail.com",
+                    "+99999999992",
+                    "tester 2",
+                    2000L,
+                    LocalDate.of(1998, Month.AUGUST, 14));
 
             donatorRepository.saveAll(
-                List.of(test1, test2)
-            );
+                    List.of(test1, test2));
         };
     }
 }

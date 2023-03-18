@@ -46,8 +46,7 @@ public class NewsController {
             @PathVariable("newsId") UUID newsId,
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String text,
-            @RequestParam(required = false) String imgSrc
-    ) {
+            @RequestParam(required = false) String imgSrc) {
         newsService.updateNews(newsId, title, text, imgSrc);
     }
 }

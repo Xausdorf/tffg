@@ -19,9 +19,9 @@ import com.sunrise.tffg.services.DonatorService;
 @RestController
 @RequestMapping(path = "api/v1/donator")
 public class DonatorController {
-    
+
     private final DonatorService donatorService;
-    
+
     public DonatorController(DonatorService donatorService) {
         this.donatorService = donatorService;
     }
@@ -43,12 +43,11 @@ public class DonatorController {
 
     @PutMapping(path = "{donatorId}")
     public void updateDonator(
-        @PathVariable("donatorId") UUID donatorId,
-        @RequestParam(required = false) String email,
-        @RequestParam(required = false) String phone,
-        @RequestParam(required = false) String name,
-        @RequestParam(required = false) Long sum
-    ) {
+            @PathVariable("donatorId") UUID donatorId,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String phone,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Long sum) {
         donatorService.updateDonator(donatorId, email, phone, name, sum);
     }
 }

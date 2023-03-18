@@ -10,7 +10,7 @@ import java.time.LocalDate;
 public class News {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String title;
     private String text;

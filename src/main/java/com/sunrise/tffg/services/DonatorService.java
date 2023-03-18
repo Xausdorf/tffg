@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.sunrise.tffg.InternalException;
 import com.sunrise.tffg.model.Donator;
 import com.sunrise.tffg.repositories.DonatorRepository;
 
@@ -30,7 +31,7 @@ public class DonatorService {
         Optional<Donator> donatorOptional = donatorRepository.findDonatorByEmailOrPhone(donator.getEmail(),
                 donator.getPhone());
         if (donatorOptional.isPresent()) {
-            throw new IllegalStateException("email or phone taken");
+            throw new InternalException("email or phone taken");
         }
 
         donator.setJoinDate(LocalDate.now());
@@ -41,7 +42,7 @@ public class DonatorService {
     public void deleteDonator(UUID donatorId) {
         boolean exists = donatorRepository.existsById(donatorId);
         if (!exists) {
-            throw new IllegalStateException("donator with id " + donatorId + " does not exist");
+            throw new InternalException("donator with id " + donatorId + " does not exist");
         }
 
         donatorRepository.deleteById(donatorId);
@@ -55,7 +56,7 @@ public class DonatorService {
         if (email != null && email.length() > 0 && !Objects.equals(donator.getEmail(), email)) {
             Optional<Donator> donatorOptional = donatorRepository.findDonatorByEmail(email);
             if (donatorOptional.isPresent()) {
-                throw new IllegalStateException("email taken");
+                throw new InternalException("email taken");
             }
             donator.setEmail(email);
         }
@@ -63,7 +64,7 @@ public class DonatorService {
         if (phone != null && phone.length() > 0 && !Objects.equals(donator.getPhone(), phone)) {
             Optional<Donator> donatorOptional = donatorRepository.findDonatorByPhone(phone);
             if (donatorOptional.isPresent()) {
-                throw new IllegalStateException("phone taken");
+                throw new InternalException("phone taken");
             }
             donator.setPhone(phone);
         }
