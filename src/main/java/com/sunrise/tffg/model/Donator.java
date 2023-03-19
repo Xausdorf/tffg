@@ -19,26 +19,26 @@ public class Donator {
     private String email;
     private String phone;
     private String name;
-    private Long sum;
+    private Integer level;
     private LocalDate joinDate;
 
     public Donator() {
     }
 
-    public Donator(UUID id, String email, String phone, String name, Long sum, LocalDate joinDate) {
+    public Donator(String email, String phone, String name, Integer level) {
+        this.email = email;
+        this.phone = phone;
+        this.name = name;
+        this.level = level;
+    }
+
+    public Donator(UUID id, String email, String phone, String name, Integer level, LocalDate joinDate) {
         this.id = id;
         this.email = email;
         this.phone = phone;
         this.name = name;
-        this.sum = sum;
+        this.level = level;
         this.joinDate = joinDate;
-    }
-
-    public Donator(String email, String phone, String name, Long sum) {
-        this.email = email;
-        this.phone = phone;
-        this.name = name;
-        this.sum = sum;
     }
 
     public UUID getId() {
@@ -73,14 +73,6 @@ public class Donator {
         this.name = name;
     }
 
-    public Long getSum() {
-        return sum;
-    }
-
-    public void setSum(Long sum) {
-        this.sum = sum;
-    }
-
     public LocalDate getJoinDate() {
         return joinDate;
     }
@@ -91,8 +83,16 @@ public class Donator {
 
     @Override
     public String toString() {
-        return "Donator [id=" + id + ", email=" + email + ", phone=" + phone + ", name=" + name + ", sum=" + sum
+        return "Donator [id=" + id + ", email=" + email + ", phone=" + phone + ", name=" + name + ", level=" + level
                 + ", joinDate=" + joinDate + "]";
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 
 }

@@ -30,6 +30,11 @@ public class DonatorController {
     public List<Donator> getDonators() {
         return donatorService.getDonators();
     }
+    
+    @GetMapping(path = "{level}")
+    public List<Donator> getDonatorsByLevel(@PathVariable("level") Integer level) {
+        return donatorService.getDonatorsByLevel(level);
+    }
 
     @PostMapping
     public void addDonator(@RequestBody Donator donator) {
@@ -47,7 +52,7 @@ public class DonatorController {
             @RequestParam(required = false) String email,
             @RequestParam(required = false) String phone,
             @RequestParam(required = false) String name,
-            @RequestParam(required = false) Long sum) {
-        donatorService.updateDonator(donatorId, email, phone, name, sum);
+            @RequestParam(required = false) Integer level) {
+        donatorService.updateDonator(donatorId, email, phone, name, level);
     }
 }

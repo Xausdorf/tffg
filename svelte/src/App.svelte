@@ -1,6 +1,7 @@
 <script>
 	import Router from './app/routing/Router.svelte';
 	import Navbar from './app/component/Navbar.svelte';
+	import Footer from './app/component/Footer.svelte';
 </script>
 
 <style>
@@ -16,4 +17,5 @@
 <div class="app-shell">
   <Navbar />
   <Router />
+  <Footer />
 </div>

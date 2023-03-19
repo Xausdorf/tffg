@@ -1,37 +1,31 @@
 <script>
   import { hash } from '../services/route.serv'
+  import { blockMain } from '../stores.js';
   import Homepage from '../pages/Homepage.svelte';
-  import Submit from '../pages/Submit.svelte';
-  import News from '../pages/News.svelte';
+  import Donators from '../pages/Donators.svelte';
+  import Card from '../pages/Card.svelte';
   import Notfound from '../pages/Notfound.svelte';
 
   let value = Notfound;
 
   hash.subscribe( valu => {
+    blockMain.update(v => false);
     switch(valu) {
       case '':
+        blockMain.update(v => true);
         value = Homepage;
         break;
-      case 'submit':
-        value = Submit;
+      case 'donators':
+        value = Donators;
         break;
-      case 'news':
-        value = News;
+      case 'card':
+        value = Card;
         break;
       default:
         value = Notfound;
     }
   });
 </script>
-
-<style>
-  main {
-    flex-grow: 1;
-    background-color: var(--primary-color-2);
-    color: var(--second-color);
-    padding: 1rem;
-  }
-</style>
 
 <main>
   <svelte:component this={value}/>

@@ -18,23 +18,37 @@ public class DonatorConfig {
     @Bean
     CommandLineRunner commandLineRunner(DonatorRepository donatorRepository) {
         return args -> {
-            Donator test1 = new Donator(
+            donatorRepository.saveAll(List.of(
+                new Donator(
                     UUID.randomUUID(),
-                    "test@mail.com",
-                    "+99999999999",
-                    "tester 1",
-                    22000L,
-                    LocalDate.of(2000, Month.AUGUST, 12));
-            Donator test2 = new Donator(
+                    "test3@mail.com",
+                    "+99999999993",
+                    "Кулаковский Даниил Семёнович",
+                    1,
+                    LocalDate.of(2000, Month.AUGUST, 12)
+                ), new Donator(
                     UUID.randomUUID(),
-                    "test2@mail.com",
-                    "+99999999992",
-                    "tester 2",
-                    2000L,
-                    LocalDate.of(1998, Month.AUGUST, 14));
-
-            donatorRepository.saveAll(
-                    List.of(test1, test2));
+                    "test5@mail.com",
+                    "+99999999994",
+                    "Багардынов Айтал Прокопьевич",
+                    2,
+                    LocalDate.of(2000, Month.AUGUST, 12)
+                ), new Donator(
+                    UUID.randomUUID(),
+                    "test4@mail.com",
+                    "+99999999995",
+                    "Яковлев Иван Борисович",
+                    3,
+                    LocalDate.of(2000, Month.AUGUST, 12)
+                ), new Donator(
+                    UUID.randomUUID(),
+                    "test6@mail.com",
+                    "+99999999996",
+                    "Кинаев Фома Артёмович",
+                    1,
+                    LocalDate.of(2000, Month.AUGUST, 12)
+                )
+            ));
         };
     }
 }

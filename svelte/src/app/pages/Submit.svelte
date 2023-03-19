@@ -28,7 +28,7 @@
     }
 </script>
 
-<div class="card">
+<div class="card col-7 mx-auto">
   <h5 class="card-header">Отправить деняк</h5>
   <div class="card-body">
     <form>  

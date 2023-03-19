@@ -26,6 +26,10 @@ public class DonatorService {
     public List<Donator> getDonators() {
         return donatorRepository.findAll();
     }
+    
+    public List<Donator> getDonatorsByLevel(Integer level) {
+        return donatorRepository.findAllByLevel(level);
+    }
 
     public void addDonator(Donator donator) {
         Optional<Donator> donatorOptional = donatorRepository.findDonatorByEmailOrPhone(donator.getEmail(),
@@ -49,7 +53,7 @@ public class DonatorService {
     }
 
     @Transactional
-    public void updateDonator(UUID donatorId, String email, String phone, String name, Long sum) {
+    public void updateDonator(UUID donatorId, String email, String phone, String name, Integer level) {
         Donator donator = donatorRepository.findById(donatorId)
                 .orElseThrow(() -> new IllegalStateException("donator with id " + donatorId + " does not exist"));
 
@@ -73,8 +77,8 @@ public class DonatorService {
             donator.setName(name);
         }
 
-        if (sum != null && sum > 0L && !Objects.equals(donator.getSum(), sum)) {
-            donator.setSum(sum);
+        if (level != null && level > 0 && !Objects.equals(donator.getLevel(), level)) {
+            donator.setLevel(level);
         }
     }
 }

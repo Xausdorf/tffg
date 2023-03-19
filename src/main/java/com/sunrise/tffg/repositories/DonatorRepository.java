@@ -1,5 +1,6 @@
 package com.sunrise.tffg.repositories;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,4 +19,7 @@ public interface DonatorRepository extends JpaRepository<Donator, UUID> {
     
     @Query("SELECT d FROM Donator d WHERE d.phone = ?1")
     Optional<Donator> findDonatorByPhone(String phone);
+
+    @Query("SELECT d FROM Donator d WHERE d.level = ?1")
+    List<Donator> findAllByLevel(Integer level);
 }
